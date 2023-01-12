@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const router = require('../route/router.js');
+const router = require('../router/router.js');
 const {configServer} = require('../../config/config.json');
 
 const app = express();
