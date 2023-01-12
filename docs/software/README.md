@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS `mydb`.`user` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
+  `email` VARCHAR(255) NULL,
   `login` VARCHAR(255) NULL,
   `password` VARCHAR(255) NULL,
   PRIMARY KEY (`id`))
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`query` (
   `title` VARCHAR(255) NULL,
   `user_id` INT NOT NULL,
   `role_id` INT NOT NULL,
+  `source_id` INT NOT NULL,
   PRIMARY KEY (`id`, `user_id`, `role_id`, `source_id`),
   INDEX `fk_query_user_idx` (`user_id` ASC) VISIBLE,
   INDEX `fk_query_role_idx` (`role_id` ASC) VISIBLE,
@@ -74,6 +76,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`role` (
   `name` VARCHAR(255) NULL,
   `description` VARCHAR(255) NULL,
   PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`source`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`source` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`source` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `url` VARCHAR(45) NULL,
+    `api_key` VARCHAR(45) NULL,
+    PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -179,37 +193,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`metadata` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
---------------------------------------------------------
--- Data for table `mydb`.`user`
---------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'gddgdg', 'g@gmail.com', 'passw123');
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'daniil', 'd@gmail.com', 'passw321');
-
-COMMIT;
-
--------------------------------------------------------
--- Data for table `mydb`.`source`
--------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://kpi.ua', 'AZdsdadWEqweWQEQWEQds');
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://mono.ua', 'AZdsdEwerwweWQEQWEQds');
-
-COMMIT;
 ```
 
 ## RESTfull сервіс для управління даними
@@ -241,7 +224,7 @@ app.listen(port, (err) => {
 ```js
 'use strict';
 
-const { dbConfig } = require('../config.json');
+const { dbConfig } = require('../config/config.json');
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(dbConfig.dbName, dbConfig.userName, dbConfig.dbPassword, {
@@ -263,9 +246,9 @@ module.exports = { user }
         "PORT": 8080
     },
     "dbConfig": {
-        "dbName": "test",
+        "dbName": "mydb",
         "userName": "root",
-        "dbPassword": "password",
+        "dbPassword": "Passw0rd",
         "dialect": "mysql",
         "host": "localhost"
     }
@@ -286,10 +269,7 @@ router.post('/user', createUser);
 router.put('/user/:id', updateUser);
 router.delete('/user/:id', removeUser);
 router.get('/user/:id', getUserById);
-
-router.get('*', errorFoundPage);
-
-router.use(serverError);
+router.get('/user', getAllUsers);
 
 module.exports = router;
 
@@ -342,8 +322,6 @@ module.exports = user;
 
 ```js
 'use strict';
-
-const { user } = require('../../../js/connection/connection.js');
 
 async function createUsr(data) {
     await user.create(data)
@@ -425,9 +403,7 @@ module.exports = { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr }
 ```js
 'use strict';
 
-const { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr } = require('./userhelp/userHelp.js');
-
-async function createUser(req, res) {
+sync function createUser(req, res) {
     try {
         const user = await createUsr(req.body)
         return res.status(200).json(`User successfully created`);
@@ -473,5 +449,4 @@ async function updateUser(req, res) {
 }
 
 module.exports = { createUser, getUserById, getAllUsers, removeUser, updateUser };
-
 ```

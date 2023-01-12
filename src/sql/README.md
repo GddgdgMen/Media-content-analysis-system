@@ -190,35 +190,4 @@ CREATE TABLE IF NOT EXISTS `mydb`.`metadata` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
---------------------------------------------------------
--- Data for table `mydb`.`user`
---------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'gddgdg', 'g@gmail.com', 'passw123');
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'daniil', 'd@gmail.com', 'passw321');
-
-COMMIT;
-
--------------------------------------------------------
--- Data for table `mydb`.`source`
--------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://kpi.ua', 'AZdsdadWEqweWQEQWEQds');
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://mono.ua', 'AZdsdEwerwweWQEQWEQds');
-
-COMMIT;
 ```

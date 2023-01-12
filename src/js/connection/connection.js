@@ -1,6 +1,6 @@
 'use strict';
 
-const { dbConfig } = require('../config/config.json');
+const { dbConfig } = require('../config.json');
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(dbConfig.dbName, dbConfig.userName, dbConfig.dbPassword, {

@@ -1,6 +1,6 @@
 'use strict';
 
-const { user } = require('../../../js/connection/connection.js');
+const { user } = require('../../connection/connection.js');
 
 async function createUsr(data) {
     await user.create(data)
