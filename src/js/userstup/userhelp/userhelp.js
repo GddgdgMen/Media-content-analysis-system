@@ -1,4 +1,6 @@
-const { user } = require('../../connection/connection.js');
+'use strict';
+
+const { user } = require('../../../js/connection/connection.js');
 
 async function createUsr(data) {
     await user.create(data)
@@ -17,7 +19,16 @@ async function getUsr(id) {
         throw new Error(`user where id = ${id} doesn't exists`)
     }
 
-    return res; 
+    return res;
+}
+
+async function getAllUsrs() {
+    const res = await user.findAll();
+    if(res.length === 0) { 
+        throw new Error(`user table is empty`)
+    }
+
+    return res;
 }
 
 async function updateUsr(id, data) {
@@ -29,7 +40,7 @@ async function updateUsr(id, data) {
     .catch((err) => console.error(`Error check exists user -> ${err}`));
 
     if(res.length !== 0) {
-        await user.update({data}, {
+        await user.update(data, {
             where: {
                 "id": id,
             }
@@ -64,4 +75,4 @@ async function removeUsr(id) {
     }
 }
 
-module.exports = { createUsr, getUsr, updateUsr, removeUsr }
+module.exports = { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr }

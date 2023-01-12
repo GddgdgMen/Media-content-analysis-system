@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = require('../router/router.js');
-const {configServer} = require('../../config/config.json');
+const {configServer} = require('../config/config.json');
 
 const app = express();
 const port = process.env.PORT || configServer.PORT;

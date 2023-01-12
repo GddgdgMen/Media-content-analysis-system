@@ -1,10 +1,11 @@
 'use strict';
-const { createUsr, getUsr, updateUsr, deleteUsr } = require('./userhelp/userHelp.js');
+
+const { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr } = require('./userhelp/userHelp.js');
 
 async function createUser(req, res) {
     try {
         const user = await createUsr(req.body)
-        return res.status(200).json(`User successfully created: ${user}`);
+        return res.status(200).json(`User successfully created`);
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
@@ -13,7 +14,16 @@ async function createUser(req, res) {
 async function getUserById(req, res) {
     try {
         const user = await getUsr(req.params.id);
-        return res.status(200).json(`User: ${user}`);
+        return res.status(200).json(user);
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function getAllUsers(req, res) {
+    try {
+        const users = await getAllUsrs();
+        return res.status(200).json(users);
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
@@ -21,8 +31,8 @@ async function getUserById(req, res) {
 
 async function removeUser(req, res) {
     try {
-        await deleteUsr(req.params.id);
-        return res.status(204).json('Success Code: "204 No Content"');
+        await removeUsr(req.params.id);
+        return res.status(200).json('User successfully removed');
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
@@ -31,12 +41,10 @@ async function removeUser(req, res) {
 async function updateUser(req, res) {
     try {
         const user = await updateUsr(req.params.id, req.body);
-        return res.status(200).json('Success Code: 200 OK');
+        return res.status(200).json('User successfully updated');
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
 }
 
-
-
-module.exports = { createUser, getUserById, removeUser, updateUser };
+module.exports = { createUser, getUserById, getAllUsers, removeUser, updateUser };

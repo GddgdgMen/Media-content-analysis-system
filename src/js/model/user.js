@@ -1,3 +1,5 @@
+'use strict';
+
 const Sequelize = require('sequelize');
 
 function user(sequelize) {
@@ -14,6 +16,10 @@ function user(sequelize) {
             allowNull: false,
         },
         email: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        login: {
             type: Sequelize.STRING,
             allowNull: false,
         },
