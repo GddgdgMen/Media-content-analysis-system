@@ -5,7 +5,7 @@
     "dbConfig": {
         "dbName": "mydb",
         "userName": "root",
-        "dbPassword": "Passw0rd",
+        "dbPassword": "1q2w3e",
         "dialect": "mysql",
         "host": "localhost"
     }
